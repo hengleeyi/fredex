@@ -24,6 +24,7 @@ export default async function Home() {
   return (
     <div>
       <h1 className="text-3xl">Fred</h1>
+      <MyChart data={seriesOberservationData} />
     </div>
   );
 }
