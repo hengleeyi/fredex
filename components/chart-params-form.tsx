@@ -25,9 +25,8 @@ import {
 } from "./ui/select";
 import { DialogClose } from "./ui/dialog";
 import { useLocalStorage } from "usehooks-ts";
-import { randomUUID } from "crypto";
-type ChartParamsForm = z.infer<typeof chartParamsFormSchema>;
-type ChartParams = z.infer<typeof chartParamsSchema>;
+import { ChartParams, type ChartParamsForm } from "@/shemas/types";
+
 type ChartParamsFormProps = {
   chartParams?: ChartParams;
 };
@@ -38,12 +37,7 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
     []
   );
 
-  console.log("🚀 ~ ChartParamsForm ~ local storage storeCharts:", storeCharts);
-
   const onSubmit = (values: ChartParamsForm) => {
-    console.log("🚀 ~ onSubmit ~ values:", values);
-    console.log("🚀 ~ ChartParamsForm ~ storeCharts:", storeCharts);
-
     if (chartParams) {
       // edirt chart
       const chartIndex = storeCharts.findIndex(

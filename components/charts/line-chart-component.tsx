@@ -1,7 +1,7 @@
 "use client";
 
-import { chartParamsSchema } from "@/shemas/chartParams";
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
+import { ChartParams } from "@/shemas/types";
 import {
   CartesianGrid,
   Legend,
@@ -19,7 +19,6 @@ type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
 };
-type ChartParams = z.infer<typeof chartParamsSchema>;
 
 export const CustomTooltip = ({
   active,
@@ -46,7 +45,6 @@ const LineChartComponent = ({ data }: Props) => {
     "charts",
     []
   );
-  console.log("🚀 ~ MyChart ~ storeCharts:", storeCharts);
   return (
     <div className="flex h-96">
       <ResponsiveContainer width="100%" height="100%">

@@ -1,7 +1,7 @@
 "use client";
 
-import { chartParamsSchema } from "@/shemas/chartParams";
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
+import { ChartParams } from "@/shemas/types";
 import {
   Bar,
   BarChart,
@@ -18,7 +18,6 @@ type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
 };
-type ChartParams = z.infer<typeof chartParamsSchema>;
 
 export const CustomTooltip = ({
   active,
@@ -45,7 +44,6 @@ const BarChartComponent = ({ data }: Props) => {
     "charts",
     []
   );
-  console.log("🚀 ~ MyChart ~ storeCharts:", storeCharts);
 
   const dataset = data.observations.map((observation) => {
     return {
