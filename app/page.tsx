@@ -1,4 +1,6 @@
-import MyChart from "@/components/my-chart";
+import AddChart from "@/components/add-chart";
+import LineChartComponent from "@/components/charts/line-chart-component";
+import BarChartComponent from "@/components/charts/bar-chart-component";
 import { getEndpoint } from "@/lib/util";
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
 
@@ -24,7 +26,12 @@ export default async function Home() {
   return (
     <div>
       <h1 className="text-3xl">Fred</h1>
-      <MyChart data={seriesOberservationData} />
+      <div className="flex justify-end p-4">
+        <AddChart />
+      </div>
+
+      <LineChartComponent data={seriesOberservationData} />
+      <BarChartComponent data={seriesOberservationData} />
     </div>
   );
 }

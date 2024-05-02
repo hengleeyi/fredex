@@ -1,7 +1,7 @@
 "use client";
 
+import { chartParamsSchema } from "@/shemas/chartParams";
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
-import React from "react";
 import {
   CartesianGrid,
   Legend,
@@ -12,12 +12,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useLocalStorage } from "usehooks-ts";
 import { z } from "zod";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
 };
+type ChartParams = z.infer<typeof chartParamsSchema>;
 
 export const CustomTooltip = ({
   active,
@@ -29,7 +31,6 @@ export const CustomTooltip = ({
   valueLabel: string;
 }) => {
   if (active && payload && payload.length) {
-    console.log("🚀 ~ payload:", payload)
     const { date, value } = payload[0].payload;
     return (
       <div className="bg-white p-2 border rounded-lg text-black">
@@ -37,11 +38,15 @@ export const CustomTooltip = ({
         <p>{`Value: ${value}`}</p>
       </div>
     );
-  
   }
 };
 
-const MyChart = ({ data }: Props) => {
+const LineChartComponent = ({ data }: Props) => {
+  const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
+    "charts",
+    []
+  );
+  console.log("🚀 ~ MyChart ~ storeCharts:", storeCharts);
   return (
     <div className="flex h-96">
       <ResponsiveContainer width="100%" height="100%">
@@ -78,4 +83,4 @@ const MyChart = ({ data }: Props) => {
   );
 };
 
-export default MyChart;
+export default LineChartComponent;
