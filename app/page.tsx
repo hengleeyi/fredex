@@ -1,5 +1,9 @@
-import AddChart from "@/components/add-chart";
 import Dashboard from "@/components/dashboard";
+import dynamic from "next/dynamic";
+
+const AddChart = dynamic(() => import("@/components/add-chart"), {
+  ssr: false,
+});
 
 export default async function Home() {
   return (

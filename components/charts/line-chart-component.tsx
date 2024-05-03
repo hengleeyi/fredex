@@ -14,10 +14,15 @@ import {
 } from "recharts";
 import { useLocalStorage } from "usehooks-ts";
 import { z } from "zod";
+import { Button } from "../ui/button";
+import { PencilLine } from "lucide-react";
+import { useRouter } from "next/navigation";
+import useQueryString from "@/hooks/useQueryString";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
+  id: string;
 };
 
 export const CustomTooltip = ({
@@ -40,13 +45,30 @@ export const CustomTooltip = ({
   }
 };
 
-const LineChartComponent = ({ data }: Props) => {
+const LineChartComponent = ({ data, id }: Props) => {
   const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
     "charts",
     []
   );
+  const router = useRouter();
+  const { createQueryString } = useQueryString();
   return (
     <div className="flex h-96">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => {
+          router.replace(
+            `/` +
+              "?" +
+              createQueryString({
+                query: { model: "config", chartId: id },
+              })
+          );
+        }}
+      >
+        <PencilLine />
+      </Button>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           width={500}

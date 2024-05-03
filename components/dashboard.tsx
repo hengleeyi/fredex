@@ -16,7 +16,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3 p-4">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 p-4 xl:grid-cols-3">
       {storeCharts.map((chartParams) => (
         <ChartContainer params={chartParams} key={chartParams.id} />
       ))}

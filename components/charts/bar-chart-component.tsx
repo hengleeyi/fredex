@@ -2,21 +2,25 @@
 
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
 import { ChartParams } from "@/shemas/types";
+import { PencilLine } from "lucide-react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend, ResponsiveContainer,
+  Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from "recharts";
 import { useLocalStorage } from "usehooks-ts";
 import { z } from "zod";
+import { Button } from "../ui/button";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
+  id: string;
 };
 
 export const CustomTooltip = ({
@@ -39,7 +43,7 @@ export const CustomTooltip = ({
   }
 };
 
-const BarChartComponent = ({ data }: Props) => {
+const BarChartComponent = ({ data, id }: Props) => {
   const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
     "charts",
     []
@@ -54,6 +58,9 @@ const BarChartComponent = ({ data }: Props) => {
 
   return (
     <div className="flex h-96">
+      <Button variant="outline" size="icon">
+        <PencilLine />
+      </Button>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           width={500}

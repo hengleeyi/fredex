@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 const ChartShell = ({ children }: { children: React.ReactNode }) => {

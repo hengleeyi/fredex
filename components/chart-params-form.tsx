@@ -26,12 +26,14 @@ import {
 import { DialogClose } from "./ui/dialog";
 import { useLocalStorage } from "usehooks-ts";
 import { ChartParams, type ChartParamsForm } from "@/shemas/types";
+import { useRouter } from "next/navigation";
 
 type ChartParamsFormProps = {
   chartParams?: ChartParams;
 };
 
 const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
+  const router = useRouter();
   const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
     "charts",
     []
@@ -56,13 +58,14 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
       };
       storeCharts.push(newChart);
     }
+    router.replace("/");
     setStoreCharts(storeCharts);
   };
 
   const form = useForm<ChartParamsForm>({
     resolver: zodResolver(chartParamsFormSchema),
     defaultValues: {
-      title: "",
+      title: chartParams?.title ?? "",
     },
   });
   return (
