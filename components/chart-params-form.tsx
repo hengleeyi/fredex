@@ -1,11 +1,9 @@
 "use client";
-import React, { useId, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { chartParamsFormSchema, chartParamsSchema } from "@/shemas/chartParams";
-import { z } from "zod";
+import { chartParamsFormSchema } from "@/shemas/chartParams";
 import {
   Form,
   FormControl,

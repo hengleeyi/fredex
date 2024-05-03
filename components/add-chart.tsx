@@ -45,7 +45,6 @@ const AddChart = () => {
         <Button
           variant="outline"
           onClick={() => {
-            console.log("add click");
             router.replace(
               `/` +
                 "?" +
