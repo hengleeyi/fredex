@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { chartParamsFormSchema } from "@/shemas/chartParams";
+import { soChartParamsFormSchema } from "@/schemas/chartParams";
 import {
   Form,
   FormControl,
@@ -23,21 +23,21 @@ import {
 } from "./ui/select";
 import { DialogClose } from "./ui/dialog";
 import { useLocalStorage } from "usehooks-ts";
-import { ChartParams, type ChartParamsForm } from "@/shemas/types";
+import { SoChartParams, type SoChartParamsForm } from "@/schemas/types";
 import { useRouter } from "next/navigation";
 
-type ChartParamsFormProps = {
-  chartParams?: ChartParams;
+type SoChartParamsFormProps = {
+  chartParams?: SoChartParams;
 };
 
-const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
+const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
   const router = useRouter();
-  const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartParams[]>(
     "charts",
     []
   );
 
-  const onSubmit = (values: ChartParamsForm) => {
+  const onSubmit = (values: SoChartParamsForm) => {
     if (chartParams) {
       // edirt chart
       const chartIndex = storeCharts.findIndex(
@@ -45,13 +45,14 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
       );
 
       storeCharts[chartIndex] = {
-        id: storeCharts[chartIndex].id,
+        ...chartParams,
         ...values,
       };
     } else {
       // add new chart
       const newChart = {
         id: uuidv4(),
+        datasource: "seriesObservation" as const,
         ...values,
       };
       storeCharts.push(newChart);
@@ -60,8 +61,8 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
     setStoreCharts(storeCharts);
   };
 
-  const form = useForm<ChartParamsForm>({
-    resolver: zodResolver(chartParamsFormSchema),
+  const form = useForm<SoChartParamsForm>({
+    resolver: zodResolver(soChartParamsFormSchema),
     defaultValues: {
       title: chartParams?.title ?? "",
       segment: chartParams?.segment ?? 4,
@@ -185,4 +186,4 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
   );
 };
 
-export default ChartParamsForm;
+export default SoChartParamsForm;

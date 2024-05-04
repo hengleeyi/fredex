@@ -10,7 +10,7 @@ const chartParamsFormBaseSchema = z.object({
   labelYAxis: z.string().optional(),
 });
 
-export const chartParamsFormSchema = chartParamsFormBaseSchema.superRefine(
+export const soChartParamsFormSchema = chartParamsFormBaseSchema.superRefine(
   (obj, ctx) => {
     if (obj.maxDomain === 0 && obj.minDomain === undefined) {
       ctx.addIssue({
@@ -44,6 +44,9 @@ export const chartParamsFormSchema = chartParamsFormBaseSchema.superRefine(
   }
 );
 
-export const chartParamsSchema = chartParamsFormBaseSchema.extend({
+export const dataSourceSchema = z.enum(["series", "seriesObservation"]);
+
+export const soChartParamsSchema = chartParamsFormBaseSchema.extend({
   id: z.string(),
+  datasource: dataSourceSchema,
 });

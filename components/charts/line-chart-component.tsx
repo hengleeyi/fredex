@@ -1,6 +1,6 @@
 "use client";
 
-import { seriesObservationSchema } from "@/shemas/seriesObservation";
+import { seriesObservationSchema } from "@/schemas/seriesObservation";
 import {
   CartesianGrid,
   Legend,
@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import useQueryString from "@/hooks/useQueryString";
 import { AxisDomain } from "recharts/types/util/types";
 import { getDomain } from "@/lib/utils";
+import { DataSource } from "@/schemas/types";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
@@ -28,6 +29,7 @@ type Props = {
   minDomain?: number;
   labelXAxis?: string;
   labelYAxis?: string;
+  datasource: DataSource;
 };
 
 export const CustomTooltip = ({
@@ -58,6 +60,7 @@ const LineChartComponent = ({
   segment,
   labelXAxis,
   labelYAxis,
+  datasource,
 }: Props) => {
   const router = useRouter();
   const { createQueryString } = useQueryString();
@@ -94,7 +97,7 @@ const LineChartComponent = ({
             `/` +
               "?" +
               createQueryString({
-                query: { model: "config", chartId: id },
+                query: { model: datasource, chartId: id },
               })
           );
         }}

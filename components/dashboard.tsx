@@ -2,10 +2,10 @@
 import React from "react";
 import { useLocalStorage } from "usehooks-ts";
 import ChartContainer from "./charts/chart-container";
-import { ChartParams } from "@/shemas/types";
+import { SoChartParams } from "@/schemas/types";
 
 const Dashboard = () => {
-  const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartParams[]>(
     "charts",
     [],
     { initializeWithValue: false }
