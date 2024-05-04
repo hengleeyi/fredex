@@ -12,17 +12,20 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useLocalStorage } from "usehooks-ts";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { PencilLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import useQueryString from "@/hooks/useQueryString";
+import { AxisDomain } from "recharts/types/util/types";
+import { getDomain } from "@/lib/utils";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
   id: string;
+  maxDomain?: number;
+  minDomain?: number;
 };
 
 export const CustomTooltip = ({
@@ -45,13 +48,11 @@ export const CustomTooltip = ({
   }
 };
 
-const LineChartComponent = ({ data, id }: Props) => {
-  const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
-    "charts",
-    []
-  );
+const LineChartComponent = ({ data, id, maxDomain, minDomain }: Props) => {
   const router = useRouter();
   const { createQueryString } = useQueryString();
+  const domainY: AxisDomain = getDomain(minDomain, maxDomain);
+
   return (
     <div className="flex h-96">
       <Button
@@ -83,7 +84,7 @@ const LineChartComponent = ({ data, id }: Props) => {
         >
           <CartesianGrid stroke="#F4F4F4" vertical={false} />
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis domain={domainY} allowDataOverflow />
           <Tooltip
             wrapperStyle={{ outline: "none" }}
             cursor={{ strokeDasharray: "3 3" }}

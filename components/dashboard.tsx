@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useLocalStorage } from "usehooks-ts";
-import ChartContainer from "./chart-container";
+import ChartContainer from "./charts/chart-container";
 import { ChartParams } from "@/shemas/types";
 
 const Dashboard = () => {

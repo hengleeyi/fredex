@@ -64,6 +64,8 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
     resolver: zodResolver(chartParamsFormSchema),
     defaultValues: {
       title: chartParams?.title ?? "",
+      maxDomain: chartParams?.maxDomain,
+      minDomain: chartParams?.minDomain,
     },
   });
   return (
@@ -105,12 +107,42 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
             </FormItem>
           )}
         />
+        <div className="flex gap-4">
+          <FormField
+            control={form.control}
+            name="minDomain"
+            defaultValue={chartParams?.minDomain}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Min of Y axis (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Min number" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="maxDomain"
+            defaultValue={chartParams?.maxDomain}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Max of Y axis (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Max number" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        <div className="flex mt-6 justify-end">
+        <div className="flex mt-6 justify-end gap-4">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit">Save</Button>
+          <Button type="submit">{chartParams ? "Save" : "Create"}</Button>
         </div>
       </form>
     </Form>

@@ -1,8 +1,9 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { AxisDomain } from "recharts/types/util/types";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const getEndpoint = <T extends Record<string, string>>(
@@ -21,3 +22,17 @@ export const getEndpoint = <T extends Record<string, string>>(
   return `${url}?${searchparams.toString()}`;
 };
 
+export const getDomain = (minDomain?: number, maxDomain?: number) => {
+  let domain: AxisDomain = ["dataMin", "auto"];
+
+  if (minDomain === 0 && maxDomain === 0) {
+    domain = ["dataMin", "auto"];
+  } else {
+    domain = [
+      minDomain === undefined ? "dataMin" : minDomain,
+      maxDomain === undefined ? "auto" : maxDomain,
+    ];
+  }
+
+  return domain;
+};

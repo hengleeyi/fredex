@@ -1,9 +1,9 @@
 "use client";
 import { ChartParams } from "@/shemas/types";
 import React from "react";
-import BarChartComponent from "./charts/bar-chart-component";
-import LineChartComponent from "./charts/line-chart-component";
-import ChartShell from "./charts/chart-shell";
+import BarChartComponent from "./bar-chart-component";
+import LineChartComponent from "./line-chart-component";
+import ChartShell from "./chart-shell";
 import { useSeriesObservations } from "@/hooks/queries/useSeries";
 
 type ChartContainerProps = {
@@ -20,6 +20,7 @@ console.error = (...args: any) => {
 };
 
 const ChartContainer = ({ params }: ChartContainerProps) => {
+  const { id, title, chartType, ...restParams } = params;
   const { data } = useSeriesObservations({
     series_id: "CPIAUCSL",
     observation_start: "2015-01-01",
@@ -28,17 +29,17 @@ const ChartContainer = ({ params }: ChartContainerProps) => {
 
   if (!data) return <div>Loading chart ...</div>;
 
-  if (params.chartType === "bar") {
+  if (chartType === "bar") {
     return (
-      <ChartShell>
-        <BarChartComponent data={data} id={params.id}/>
+      <ChartShell title={title}>
+        <BarChartComponent data={data} id={id} {...restParams} />
       </ChartShell>
     );
   }
 
   return (
-    <ChartShell>
-      <LineChartComponent data={data} id={params.id}/>
+    <ChartShell title={title}>
+      <LineChartComponent data={data} id={id} {...restParams} />
     </ChartShell>
   );
 };

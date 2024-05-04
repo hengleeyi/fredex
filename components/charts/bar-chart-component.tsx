@@ -16,11 +16,17 @@ import {
 import { useLocalStorage } from "usehooks-ts";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import useQueryString from "@/hooks/useQueryString";
+import { AxisDomain } from "recharts/types/util/types";
+import { getDomain } from "@/lib/utils";
 
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
   id: string;
+  maxDomain?: number;
+  minDomain?: number;
 };
 
 export const CustomTooltip = ({
@@ -43,29 +49,33 @@ export const CustomTooltip = ({
   }
 };
 
-const BarChartComponent = ({ data, id }: Props) => {
-  const [storeCharts, setStoreCharts] = useLocalStorage<ChartParams[]>(
-    "charts",
-    []
-  );
-
-  const dataset = data.observations.map((observation) => {
-    return {
-      ...observation,
-      value: parseInt(observation.value, 10),
-    };
-  });
+const BarChartComponent = ({ data, id, maxDomain, minDomain }: Props) => {
+  const router = useRouter();
+  const { createQueryString } = useQueryString();
+  const domainY: AxisDomain = getDomain(minDomain, maxDomain);
 
   return (
     <div className="flex h-96">
-      <Button variant="outline" size="icon">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => {
+          router.replace(
+            `/` +
+              "?" +
+              createQueryString({
+                query: { model: "config", chartId: id },
+              })
+          );
+        }}
+      >
         <PencilLine />
       </Button>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           width={500}
           height={300}
-          data={dataset}
+          data={data.observations}
           margin={{
             top: 5,
             right: 30,
@@ -75,7 +85,7 @@ const BarChartComponent = ({ data, id }: Props) => {
         >
           <CartesianGrid stroke="#F4F4F4" vertical={false} />
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis domain={domainY} allowDataOverflow />
           <Tooltip
             wrapperStyle={{ outline: "none" }}
             cursor={{ strokeDasharray: "3 3" }}

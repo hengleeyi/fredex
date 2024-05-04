@@ -30,6 +30,8 @@ const AddChart = () => {
 
   if (chartId) {
     editChat = storeCharts.find((storeChart) => storeChart.id === chartId);
+
+    
   }
 
   return (
