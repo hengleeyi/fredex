@@ -64,8 +64,10 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
     resolver: zodResolver(chartParamsFormSchema),
     defaultValues: {
       title: chartParams?.title ?? "",
+      segment: chartParams?.segment ?? 4,
       maxDomain: chartParams?.maxDomain,
       minDomain: chartParams?.minDomain,
+      labelYAxis: chartParams?.labelYAxis,
     },
   });
   return (
@@ -124,13 +126,47 @@ const ChartParamsForm = ({ chartParams }: ChartParamsFormProps) => {
           />
           <FormField
             control={form.control}
-            name="maxDomain"
+            name="segment"
             defaultValue={chartParams?.maxDomain}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Max of Y axis (Optional)</FormLabel>
+                <FormLabel>Segments of Y axis</FormLabel>
                 <FormControl>
-                  <Input placeholder="Max number" type="number" {...field} />
+                  <Input
+                    placeholder="segment number"
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex gap-4">
+          <FormField
+            control={form.control}
+            name="labelXAxis"
+            defaultValue={chartParams?.labelXAxis}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Label of X axis (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Label of X axis" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="labelYAxis"
+            defaultValue={chartParams?.labelYAxis}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Label of Y axis (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Label of Y axis" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

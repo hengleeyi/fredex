@@ -5,6 +5,9 @@ const chartParamsFormBaseSchema = z.object({
   chartType: z.enum(["line", "bar"]),
   maxDomain: z.coerce.number().min(0).optional(),
   minDomain: z.coerce.number().min(0).optional(),
+  segment: z.coerce.number().min(1),
+  labelXAxis: z.string().optional(),
+  labelYAxis: z.string().optional(),
 });
 
 export const chartParamsFormSchema = chartParamsFormBaseSchema.superRefine(

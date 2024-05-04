@@ -1,7 +1,6 @@
 "use client";
 
 import { seriesObservationSchema } from "@/shemas/seriesObservation";
-import { ChartParams } from "@/shemas/types";
 import {
   CartesianGrid,
   Legend,
@@ -24,8 +23,11 @@ type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
   id: string;
+  segment: number;
   maxDomain?: number;
   minDomain?: number;
+  labelXAxis?: string;
+  labelYAxis?: string;
 };
 
 export const CustomTooltip = ({
@@ -48,10 +50,39 @@ export const CustomTooltip = ({
   }
 };
 
-const LineChartComponent = ({ data, id, maxDomain, minDomain }: Props) => {
+const LineChartComponent = ({
+  data,
+  id,
+  maxDomain,
+  minDomain,
+  segment,
+  labelXAxis,
+  labelYAxis,
+}: Props) => {
   const router = useRouter();
   const { createQueryString } = useQueryString();
   const domainY: AxisDomain = getDomain(minDomain, maxDomain);
+
+  const customLabelYAxis = labelYAxis
+    ? {
+        value: labelYAxis,
+        angle: -90,
+        position: "insideLeft",
+        offset: 0,
+        fontWeight: "bold",
+        fill: "#0f172a",
+      }
+    : undefined;
+
+  const customLabelXAxis = labelXAxis
+    ? {
+        value: labelXAxis,
+        position: "insideBottomRight",
+        fontWeight: "bold",
+        fill: "#0f172a",
+        offset: -10,
+      }
+    : undefined;
 
   return (
     <div className="flex h-96">
@@ -83,8 +114,14 @@ const LineChartComponent = ({ data, id, maxDomain, minDomain }: Props) => {
           }}
         >
           <CartesianGrid stroke="#F4F4F4" vertical={false} />
-          <XAxis dataKey="date" />
-          <YAxis domain={domainY} allowDataOverflow />
+          <XAxis dataKey="date" label={customLabelXAxis} />
+          <YAxis
+            domain={domainY}
+            allowDataOverflow
+            tickCount={segment + 1}
+            interval={0}
+            label={customLabelYAxis}
+          />
           <Tooltip
             wrapperStyle={{ outline: "none" }}
             cursor={{ strokeDasharray: "3 3" }}
