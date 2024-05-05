@@ -1,13 +1,14 @@
 "use client";
-import { SoChartParams } from "@/schemas/types";
+import { SoChartStorageParams } from "@/schemas/types";
 import React from "react";
 import BarChartComponent from "./bar-chart-component";
 import LineChartComponent from "./line-chart-component";
 import ChartShell from "./chart-shell";
 import { useSeries, useSeriesObservations } from "@/hooks/queries/useSeries";
+import { format } from "date-fns";
 
-type ChartContainerProps = {
-  params: SoChartParams;
+type SoChartContainerProps = {
+  params: SoChartStorageParams;
 };
 
 // Override console.error
@@ -19,22 +20,26 @@ console.error = (...args: any) => {
   error(...args);
 };
 
-const ChartContainer = ({ params }: ChartContainerProps) => {
+const SoChartContainer = ({ params }: SoChartContainerProps) => {
   const { id, title, chartType, datasource, ...restParams } = params;
-  const { data: seriesData } = useSeries({
-    series_id: "GNPCA",
-    realtime_start: "2015-01-01",
-    realtime_end: "2021-12-31",
-    datasource,
-  });
+  // const { data: seriesData } = useSeries({
+  //   series_id: "GNPCA",
+  //   realtime_start: "2015-01-01",
+  //   realtime_end: "2021-12-31",
+  //   datasource,
+  // });
+
+  const formatedStartDate = format(restParams.observation_start, "yyyy-MM-dd");
+  const formatedEndDate = format(restParams.observation_end, "yyyy-MM-dd");
+
   const { data: seriesObservationData } = useSeriesObservations({
     series_id: "CPIAUCSL",
-    observation_start: "2015-01-01",
-    observation_end: "2021-12-31",
+    observation_start: formatedStartDate,
+    observation_end: formatedEndDate,
     datasource,
   });
 
-  const data = seriesData || seriesObservationData;
+  const data = seriesObservationData;
 
   if (!data) return <div>Loading chart ...</div>;
 
@@ -63,4 +68,4 @@ const ChartContainer = ({ params }: ChartContainerProps) => {
   );
 };
 
-export default ChartContainer;
+export default SoChartContainer;

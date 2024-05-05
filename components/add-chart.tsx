@@ -14,7 +14,7 @@ import SoChartParamsForm from "./so-chart-params-form";
 import { useRouter } from "next/navigation";
 import useQueryString from "@/hooks/useQueryString";
 import { useLocalStorage } from "usehooks-ts";
-import { DataSource, SoChartParams } from "@/schemas/types";
+import { DataSource, SoChartStorageParams } from "@/schemas/types";
 import {
   Select,
   SelectContent,
@@ -29,7 +29,7 @@ const AddChart = () => {
   const [dataSource, setDatasource] = useState<DataSource>("seriesObservation");
   const modelName = searchParams.get("model");
   const chartId = searchParams.get("chartId");
-  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartStorageParams[]>(
     "charts",
     []
   );

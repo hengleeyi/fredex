@@ -23,16 +23,24 @@ import {
 } from "./ui/select";
 import { DialogClose } from "./ui/dialog";
 import { useLocalStorage } from "usehooks-ts";
-import { SoChartParams, type SoChartParamsForm } from "@/schemas/types";
+import {
+  type SoChartStorageParams,
+  type SoChartParamsForm,
+} from "@/schemas/types";
 import { useRouter } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "./ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type SoChartParamsFormProps = {
-  chartParams?: SoChartParams;
+  chartParams?: SoChartStorageParams;
 };
 
 const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
   const router = useRouter();
-  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartStorageParams[]>(
     "charts",
     []
   );
@@ -47,6 +55,8 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
       storeCharts[chartIndex] = {
         ...chartParams,
         ...values,
+        observation_start: format(values.observation_start, "yyyy-MM-dd"),
+        observation_end: format(values.observation_end, "yyyy-MM-dd"),
       };
     } else {
       // add new chart
@@ -54,6 +64,8 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
         id: uuidv4(),
         datasource: "seriesObservation" as const,
         ...values,
+        observation_start: format(values.observation_start, "yyyy-MM-dd"),
+        observation_end: format(values.observation_end, "yyyy-MM-dd"),
       };
       storeCharts.push(newChart);
     }
@@ -110,6 +122,112 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            defaultValue={
+              chartParams?.observation_start
+                ? new Date(chartParams?.observation_start)
+                : undefined
+            }
+            name="observation_start"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Start Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={new Date(field.value)}
+                      onSelect={(val) => {
+                        console.log(
+                          "🚀 ~ SoChartParamsForm ~ observation_start val:",
+                          val
+                        );
+                        field.onChange(val);
+                      }}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("2000-01-01")
+                      }
+                      captionLayout="dropdown"
+                      fromYear={2000}
+                      toYear={2024}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            defaultValue={
+              chartParams?.observation_end
+                ? new Date(chartParams?.observation_end)
+                : undefined
+            }
+            name="observation_end"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>End Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={new Date(field.value)}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("2000-01-01")
+                      }
+                      captionLayout="dropdown"
+                      fromYear={2000}
+                      toYear={2024}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="flex gap-4">
           <FormField
             control={form.control}

@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { useLocalStorage } from "usehooks-ts";
-import ChartContainer from "./charts/chart-container";
-import { SoChartParams } from "@/schemas/types";
+import SoChartContainer from "./charts/so-chart-container";
+import { SoChartStorageParams } from "@/schemas/types";
 
 const Dashboard = () => {
-  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartStorageParams[]>(
     "charts",
     [],
     { initializeWithValue: false }
@@ -17,9 +17,11 @@ const Dashboard = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 p-4 xl:grid-cols-3">
-      {storeCharts.map((chartParams) => (
-        <ChartContainer params={chartParams} key={chartParams.id} />
-      ))}
+      {storeCharts.map((chartParams) => {
+        if (chartParams.datasource === "seriesObservation") {
+          return <SoChartContainer params={chartParams} key={chartParams.id} />;
+        }
+      })}
     </div>
   );
 };

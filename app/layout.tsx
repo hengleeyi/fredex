@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "@/styles/calendar.css"
 import MainNav from "@/components/mian-nav";
 import { ReactQueryProvider } from "@/components/react-query-provider";
 
