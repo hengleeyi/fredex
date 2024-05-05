@@ -314,13 +314,27 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
+                name="titleColor"
+                defaultValue={chartParams?.titleColor}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title Color (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="ex: #0f172a or brown" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="lineColor"
                 defaultValue={chartParams?.lineColor}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Color (Optional)</FormLabel>
+                    <FormLabel>Chart Color (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="ex: #8884d8" {...field} />
+                      <Input placeholder="ex: #8884d8 or blue" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

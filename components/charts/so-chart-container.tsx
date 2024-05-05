@@ -21,7 +21,7 @@ console.error = (...args: any) => {
 };
 
 const SoChartContainer = ({ params }: SoChartContainerProps) => {
-  const { id, title, chartType, datasource, ...restParams } = params;
+  const { id, title, titleColor, chartType, datasource, ...restParams } = params;
   // const { data: seriesData } = useSeries({
   //   series_id: "GNPCA",
   //   realtime_start: "2015-01-01",
@@ -42,7 +42,7 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
   const data = seriesObservationData;
   if (error) {
     return (
-      <ChartShell title={title}>
+      <ChartShell title={title} titleColor={titleColor}>
         <ChartToolbar datasource={datasource} id={id} />
         <div className="ml-6">
           <div>{error.message}</div>
@@ -54,7 +54,7 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
 
   if (!data) {
     return (
-      <ChartShell title={title}>
+      <ChartShell title={title} titleColor={titleColor}>
         <div className="ml-6">
           <div>Loading ...</div>
         </div>
@@ -64,7 +64,7 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
 
   if (chartType === "bar") {
     return (
-      <ChartShell title={title}>
+      <ChartShell title={title} titleColor={titleColor}>
         <ChartToolbar datasource={datasource} id={id} />
         <BarChartComponent
           data={data}
@@ -75,7 +75,7 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
   }
 
   return (
-    <ChartShell title={title}>
+    <ChartShell title={title} titleColor={titleColor}>
       <ChartToolbar datasource={datasource} id={id} />
       <LineChartComponent
         data={data}

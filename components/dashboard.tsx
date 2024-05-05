@@ -1,15 +1,13 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import SoChartContainer from "./charts/so-chart-container";
 import { SoChartStorageParams } from "@/schemas/types";
 
 const Dashboard = () => {
-  const [storeCharts] = useLocalStorage<SoChartStorageParams[]>(
-    "charts",
-    [],
-    { initializeWithValue: false }
-  );
+  const [storeCharts] = useLocalStorage<SoChartStorageParams[]>("charts", [], {
+    initializeWithValue: false,
+  });
   const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
