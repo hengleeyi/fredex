@@ -110,7 +110,7 @@ const AddChart = () => {
           }
         }}
       >
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[750px]">
           <DialogHeader>
             <DialogTitle>Chart configuration</DialogTitle>
             <DialogDescription>Make changes to custom chart.</DialogDescription>
