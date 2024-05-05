@@ -11,6 +11,7 @@ const chartParamsFormBaseSchema = z.object({
   segment: z.coerce.number().min(1),
   labelXAxis: z.string().optional(),
   labelYAxis: z.string().optional(),
+  lineColor: z.string().optional(),
 });
 
 export const soChartParamsFormSchema = chartParamsFormBaseSchema

@@ -23,6 +23,7 @@ type Props = {
   minDomain?: number;
   labelXAxis?: string;
   labelYAxis?: string;
+  lineColor?: string;
 };
 
 export const CustomTooltip = ({
@@ -52,6 +53,7 @@ const LineChartComponent = ({
   segment,
   labelXAxis,
   labelYAxis,
+  lineColor
 }: Props) => {
   const domainY: AxisDomain = getDomain(minDomain, maxDomain);
 
@@ -108,7 +110,7 @@ const LineChartComponent = ({
         <Line
           type="monotone"
           dataKey="value"
-          stroke="#8884d8"
+          stroke={lineColor || "#8884d8"}
           activeDot={{ r: 4 }}
         />
       </LineChart>

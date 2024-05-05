@@ -243,7 +243,7 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="minDomain"
@@ -281,7 +281,7 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                 )}
               />
             </div>
-            <div className="flex gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="labelXAxis"
@@ -305,6 +305,22 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                     <FormLabel>Label of Y axis (Optional)</FormLabel>
                     <FormControl>
                       <Input placeholder="Label of Y axis" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="lineColor"
+                defaultValue={chartParams?.lineColor}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Color (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="ex: #8884d8" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -24,6 +24,7 @@ type Props = {
   minDomain?: number;
   labelXAxis?: string;
   labelYAxis?: string;
+  lineColor?: string;
 };
 
 export const CustomTooltip = ({
@@ -53,6 +54,7 @@ const BarChartComponent = ({
   segment,
   labelXAxis,
   labelYAxis,
+  lineColor
 }: Props) => {
   const domainY: AxisDomain = getDomain(minDomain, maxDomain);
 
@@ -106,7 +108,7 @@ const BarChartComponent = ({
           content={<CustomTooltip />}
         />
         <Legend />
-        <Bar dataKey="value" fill="#8884d8" />
+        <Bar dataKey="value" fill={lineColor || "#8884d8"} />
       </BarChart>
     </ResponsiveContainer>
   );
