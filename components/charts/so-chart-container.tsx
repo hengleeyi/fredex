@@ -1,12 +1,10 @@
 "use client";
 import { SoChartStorageParams } from "@/schemas/types";
-import React from "react";
 import BarChartComponent from "./bar-chart-component";
 import LineChartComponent from "./line-chart-component";
 import ChartShell from "./chart-shell";
-import { useSeries, useSeriesObservations } from "@/hooks/queries/useSeries";
+import { useSeriesObservations } from "@/hooks/queries/useSeries";
 import { format } from "date-fns";
-import { Button } from "../ui/button";
 import ChartToolbar from "./chart-toolbar";
 
 type SoChartContainerProps = {
@@ -70,8 +68,6 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
         <ChartToolbar datasource={datasource} id={id} />
         <BarChartComponent
           data={data}
-          id={id}
-          datasource={datasource}
           {...restParams}
         />
       </ChartShell>
@@ -83,8 +79,6 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
       <ChartToolbar datasource={datasource} id={id} />
       <LineChartComponent
         data={data}
-        id={id}
-        datasource={datasource}
         {...restParams}
       />
     </ChartShell>
