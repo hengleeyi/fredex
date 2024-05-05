@@ -145,7 +145,7 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP")
+                          format(field.value, "yyyy-MM-dd")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -157,15 +157,9 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                     <Calendar
                       mode="single"
                       selected={new Date(field.value)}
-                      onSelect={(val) => {
-                        console.log(
-                          "🚀 ~ SoChartParamsForm ~ observation_start val:",
-                          val
-                        );
-                        field.onChange(val);
-                      }}
+                      onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("2000-01-01")
+                        date > new Date() || date < new Date("1999-12-31")
                       }
                       captionLayout="dropdown"
                       fromYear={2000}
@@ -200,7 +194,7 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP")
+                          format(field.value, "yyyy-MM-dd")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -214,7 +208,7 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
                       selected={new Date(field.value)}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date("2000-01-01")
+                        date > new Date() || date < new Date("1999-12-31")
                       }
                       captionLayout="dropdown"
                       fromYear={2000}
