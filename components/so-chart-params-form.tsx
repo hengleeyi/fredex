@@ -122,6 +122,20 @@ const SoChartParamsForm = ({ chartParams }: SoChartParamsFormProps) => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="series_id"
+          defaultValue={chartParams?.series_id}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Series Id</FormLabel>
+              <FormControl>
+                <Input placeholder="ex: CPIAUCSL" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}

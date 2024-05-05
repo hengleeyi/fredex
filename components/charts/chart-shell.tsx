@@ -11,11 +11,10 @@ const ChartShell = ({
 }) => {
   return (
     <div className="border border-input p-4 ">
-      <div className="flex justify-center py-2">
+      <div className="flex justify-center pb-4">
         <Badge>{title}</Badge>
       </div>
-
-      {children}
+      <div className="flex h-80">{children}</div>
     </div>
   );
 };

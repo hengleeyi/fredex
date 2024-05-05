@@ -3,6 +3,7 @@ import { z } from "zod";
 const chartParamsFormBaseSchema = z.object({
   title: z.string().min(1, "Title is required").max(255),
   chartType: z.enum(["line", "bar"]),
+  series_id: z.string(),
   observation_start: z.string(),
   observation_end: z.string(),
   maxDomain: z.coerce.number().min(0).optional(),

@@ -1,7 +1,6 @@
 "use client";
 
 import { seriesObservationSchema } from "@/schemas/seriesObservation";
-import { PencilLine } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -13,9 +12,6 @@ import {
   YAxis,
 } from "recharts";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import useQueryString from "@/hooks/useQueryString";
 import { AxisDomain } from "recharts/types/util/types";
 import { getDomain } from "@/lib/utils";
 import { DataSource } from "@/schemas/types";
@@ -23,13 +19,11 @@ import { DataSource } from "@/schemas/types";
 type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
 type Props = {
   data: SeriesObservationData;
-  id: string;
   segment: number;
   maxDomain?: number;
   minDomain?: number;
   labelXAxis?: string;
   labelYAxis?: string;
-  datasource: DataSource;
 };
 
 export const CustomTooltip = ({
@@ -54,16 +48,12 @@ export const CustomTooltip = ({
 
 const BarChartComponent = ({
   data,
-  id,
   maxDomain,
   minDomain,
   segment,
   labelXAxis,
   labelYAxis,
-  datasource,
 }: Props) => {
-  const router = useRouter();
-  const { createQueryString } = useQueryString();
   const domainY: AxisDomain = getDomain(minDomain, maxDomain);
 
   const customLabelYAxis = labelYAxis
@@ -88,54 +78,37 @@ const BarChartComponent = ({
     : undefined;
 
   return (
-    <div className="flex h-96">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => {
-          router.replace(
-            `/` +
-              "?" +
-              createQueryString({
-                query: { model: datasource, chartId: id },
-              })
-          );
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart
+        width={500}
+        height={300}
+        data={data.observations}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
         }}
       >
-        <PencilLine />
-      </Button>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data.observations}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid stroke="#F4F4F4" vertical={false} />
-          <XAxis dataKey="date" label={customLabelXAxis} />
-          <YAxis
-            domain={domainY}
-            allowDataOverflow
-            tickCount={segment + 1}
-            interval={0}
-            label={customLabelYAxis}
-          />
-          <Tooltip
-            wrapperStyle={{ outline: "none" }}
-            cursor={{ strokeDasharray: "3 3" }}
-            // @ts-ignore
-            content={<CustomTooltip />}
-          />
-          <Legend />
-          <Bar dataKey="value" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+        <CartesianGrid stroke="#F4F4F4" vertical={false} />
+        <XAxis dataKey="date" label={customLabelXAxis} />
+        <YAxis
+          domain={domainY}
+          allowDataOverflow
+          tickCount={segment + 1}
+          interval={0}
+          label={customLabelYAxis}
+        />
+        <Tooltip
+          wrapperStyle={{ outline: "none" }}
+          cursor={{ strokeDasharray: "3 3" }}
+          // @ts-ignore
+          content={<CustomTooltip />}
+        />
+        <Legend />
+        <Bar dataKey="value" fill="#8884d8" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

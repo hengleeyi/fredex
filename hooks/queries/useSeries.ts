@@ -47,6 +47,14 @@ export const useSeriesObservations = (params: UseSeriesObservationsParams) => {
       );
       const response = await fetch(endpoint);
       const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error_message) {
+          throw new Error(data.error_message);
+        }
+        throw new Error(response.statusText);
+      }
+
       const validation = seriesObservationSchema.safeParse(data);
 
       if (validation.success) {

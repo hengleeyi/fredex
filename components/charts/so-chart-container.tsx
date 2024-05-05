@@ -6,6 +6,8 @@ import LineChartComponent from "./line-chart-component";
 import ChartShell from "./chart-shell";
 import { useSeries, useSeriesObservations } from "@/hooks/queries/useSeries";
 import { format } from "date-fns";
+import { Button } from "../ui/button";
+import ChartToolbar from "./chart-toolbar";
 
 type SoChartContainerProps = {
   params: SoChartStorageParams;
@@ -32,20 +34,40 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
   const formatedStartDate = format(restParams.observation_start, "yyyy-MM-dd");
   const formatedEndDate = format(restParams.observation_end, "yyyy-MM-dd");
 
-  const { data: seriesObservationData } = useSeriesObservations({
-    series_id: "CPIAUCSL",
+  const { data: seriesObservationData, error } = useSeriesObservations({
+    series_id: params.series_id,
     observation_start: formatedStartDate,
     observation_end: formatedEndDate,
     datasource,
   });
 
   const data = seriesObservationData;
+  if (error) {
+    return (
+      <ChartShell title={title}>
+        <ChartToolbar datasource={datasource} id={id} />
+        <div className="ml-6">
+          <div>{error.message}</div>
+          <div>Please change the chart configuration</div>
+        </div>
+      </ChartShell>
+    );
+  }
 
-  if (!data) return <div>Loading chart ...</div>;
+  if (!data) {
+    return (
+      <ChartShell title={title}>
+        <div className="ml-6">
+          <div>Loading ...</div>
+        </div>
+      </ChartShell>
+    );
+  }
 
   if (chartType === "bar") {
     return (
       <ChartShell title={title}>
+        <ChartToolbar datasource={datasource} id={id} />
         <BarChartComponent
           data={data}
           id={id}
@@ -58,6 +80,7 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
 
   return (
     <ChartShell title={title}>
+      <ChartToolbar datasource={datasource} id={id} />
       <LineChartComponent
         data={data}
         id={id}
