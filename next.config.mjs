@@ -3,8 +3,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/series",
-        destination: "https://api.stlouisfed.org/fred/series",
+        source: "/series/tags",
+        destination: "https://api.stlouisfed.org/fred/series/tags",
       },
       {
         source: "/series/observations",

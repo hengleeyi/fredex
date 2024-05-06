@@ -1,6 +1,5 @@
 "use client";
 
-import { seriesObservationSchema } from "@/schemas/seriesObservation";
 import {
   Bar,
   BarChart,
@@ -11,14 +10,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { z } from "zod";
 import { AxisDomain } from "recharts/types/util/types";
 import { getDomain } from "@/lib/utils";
-import { DataSource } from "@/schemas/types";
 
-type SeriesObservationData = z.infer<typeof seriesObservationSchema>;
-type Props = {
-  data: SeriesObservationData;
+type Props<T extends Record<string, string | null | number | undefined>[]> = {
+  data: T;
+  xKey: keyof T[number];
+  yKey: keyof T[number];
   segment: number;
   maxDomain?: number;
   minDomain?: number;
@@ -31,31 +29,41 @@ export const CustomTooltip = ({
   active,
   payload,
   valueLabel,
+  xKey,
+  yKey,
 }: {
   active: boolean;
   payload: { payload: any }[];
   valueLabel: string;
+  xKey: string;
+  yKey: string;
 }) => {
+  const capitalXKey = xKey.charAt(0).toUpperCase() + xKey.slice(1);
+  const capitalYKey = yKey.charAt(0).toUpperCase() + yKey.slice(1);
   if (active && payload && payload.length) {
-    const { date, value } = payload[0].payload;
+    const record = payload[0].payload;
     return (
       <div className="bg-white p-2 border rounded-lg text-black">
-        <p>{`Date: ${date}`}</p>
-        <p>{`Value: ${value}`}</p>
+        <p>{`${capitalXKey}: ${record[xKey]}`}</p>
+        <p>{`${capitalYKey}: ${record[yKey]}`}</p>
       </div>
     );
   }
 };
 
-const BarChartComponent = ({
+const BarChartComponent = <
+  T extends Record<string, string | null | undefined | number>[]
+>({
   data,
+  xKey,
+  yKey,
   maxDomain,
   minDomain,
   segment,
   labelXAxis,
   labelYAxis,
-  lineColor
-}: Props) => {
+  lineColor,
+}: Props<T>) => {
   const domainY: AxisDomain = getDomain(minDomain, maxDomain);
 
   const customLabelYAxis = labelYAxis
@@ -79,12 +87,14 @@ const BarChartComponent = ({
       }
     : undefined;
 
+  let datasource = [];
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         width={500}
         height={300}
-        data={data.observations}
+        data={data}
         margin={{
           top: 5,
           right: 30,
@@ -93,7 +103,7 @@ const BarChartComponent = ({
         }}
       >
         <CartesianGrid stroke="#F4F4F4" vertical={false} />
-        <XAxis dataKey="date" label={customLabelXAxis} />
+        <XAxis dataKey={xKey as string} label={customLabelXAxis} />
         <YAxis
           domain={domainY}
           allowDataOverflow
@@ -105,10 +115,10 @@ const BarChartComponent = ({
           wrapperStyle={{ outline: "none" }}
           cursor={{ strokeDasharray: "3 3" }}
           // @ts-ignore
-          content={<CustomTooltip />}
+          content={<CustomTooltip xKey={xKey} yKey={yKey}/>}
         />
         <Legend />
-        <Bar dataKey="value" fill={lineColor || "#8884d8"} />
+        <Bar dataKey={yKey as string} fill={lineColor || "#8884d8"} />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const observationsSchema = z.object({
+export const observationsSchema = z.object({
   realtime_start: z.string(),
   realtime_end: z.string(),
   date: z.string(),
@@ -20,3 +20,4 @@ export const seriesObservationSchema = z.object({
   limit: z.number(),
   observations: z.array(observationsSchema),
 });
+

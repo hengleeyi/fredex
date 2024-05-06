@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { soChartParamsFormSchema } from "@/schemas/chartParams";
+import { stChartParamsFormSchema } from "@/schemas/chartParams";
 import {
   Form,
   FormControl,
@@ -24,8 +24,8 @@ import {
 import { DialogClose } from "./ui/dialog";
 import { useLocalStorage } from "usehooks-ts";
 import {
-  type SOChartStorageParams,
-  type SOChartParamsForm,
+  type STChartStorageParams,
+  type STChartParamsForm,
 } from "@/schemas/types";
 import { useRouter } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -34,18 +34,18 @@ import { Calendar } from "./ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-type SOChartParamsFormProps = {
-  chartParams?: SOChartStorageParams;
+type STChartParamsFormProps = {
+  chartParams?: STChartStorageParams;
 };
 
-const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
+const STChartParamsForm = ({ chartParams }: STChartParamsFormProps) => {
   const router = useRouter();
-  const [storeCharts, setStoreCharts] = useLocalStorage<SOChartStorageParams[]>(
+  const [storeCharts, setStoreCharts] = useLocalStorage<STChartStorageParams[]>(
     "charts",
     []
   );
 
-  const onSubmit = (values: SOChartParamsForm) => {
+  const onSubmit = (values: STChartParamsForm) => {
     if (chartParams) {
       // edirt chart
       const chartIndex = storeCharts.findIndex(
@@ -55,17 +55,17 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
       storeCharts[chartIndex] = {
         ...chartParams,
         ...values,
-        observation_start: format(values.observation_start, "yyyy-MM-dd"),
-        observation_end: format(values.observation_end, "yyyy-MM-dd"),
+        realtime_start: format(values.realtime_start, "yyyy-MM-dd"),
+        realtime_end: format(values.realtime_end, "yyyy-MM-dd"),
       };
     } else {
       // add new chart
-      const newChart: SOChartStorageParams = {
+      const newChart: STChartStorageParams = {
         id: uuidv4(),
-        datasource: "seriesObservation",
+        datasource: "seriesTags",
         ...values,
-        observation_start: format(values.observation_start, "yyyy-MM-dd"),
-        observation_end: format(values.observation_end, "yyyy-MM-dd"),
+        realtime_start: format(values.realtime_start, "yyyy-MM-dd"),
+        realtime_end: format(values.realtime_end, "yyyy-MM-dd"),
       };
       storeCharts.push(newChart);
     }
@@ -73,8 +73,8 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
     setStoreCharts(storeCharts);
   };
 
-  const form = useForm<SOChartParamsForm>({
-    resolver: zodResolver(soChartParamsFormSchema),
+  const form = useForm<STChartParamsForm>({
+    resolver: zodResolver(stChartParamsFormSchema),
     defaultValues: {
       title: chartParams?.title ?? "",
       segment: chartParams?.segment ?? 4,
@@ -135,7 +135,7 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
                 <FormItem>
                   <FormLabel>Series Id</FormLabel>
                   <FormControl>
-                    <Input placeholder="ex: CPIAUCSL" {...field} />
+                    <Input placeholder="ex: GDP" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,14 +145,14 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
               <FormField
                 control={form.control}
                 defaultValue={
-                  chartParams?.observation_start
-                    ? new Date(chartParams?.observation_start)
+                  chartParams?.realtime_start
+                    ? new Date(chartParams?.realtime_start)
                     : undefined
                 }
-                name="observation_start"
+                name="realtime_start"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Start Date</FormLabel>
+                    <FormLabel>Realtime Start Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -194,14 +194,14 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
               <FormField
                 control={form.control}
                 defaultValue={
-                  chartParams?.observation_end
-                    ? new Date(chartParams?.observation_end)
+                  chartParams?.realtime_end
+                    ? new Date(chartParams?.realtime_end)
                     : undefined
                 }
-                name="observation_end"
+                name="realtime_end"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>End Date</FormLabel>
+                    <FormLabel>Realtime End Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -355,4 +355,4 @@ const SOChartParamsForm = ({ chartParams }: SOChartParamsFormProps) => {
   );
 };
 
-export default SOChartParamsForm;
+export default STChartParamsForm;

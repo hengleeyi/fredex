@@ -1,33 +1,24 @@
 "use client";
-import { SoChartStorageParams } from "@/schemas/types";
+import { SOChartStorageParams, SeriesObservation } from "@/schemas/types";
 import BarChartComponent from "./bar-chart-component";
 import LineChartComponent from "./line-chart-component";
 import ChartShell from "./chart-shell";
-import { useSeriesObservations } from "@/hooks/queries/useSeries";
+import {
+  useSeriesObservations
+} from "@/hooks/queries/useSeries";
 import { format } from "date-fns";
 import ChartToolbar from "./chart-toolbar";
+import { useState } from "react";
 
-type SoChartContainerProps = {
-  params: SoChartStorageParams;
+type SOChartContainerProps = {
+  params: SOChartStorageParams;
 };
 
-// Override console.error
-// This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
-// @link https://github.com/recharts/recharts/issues/3615
-const error = console.error;
-console.error = (...args: any) => {
-  if (/defaultProps/.test(args[0])) return;
-  error(...args);
-};
+const SOChartContainer = ({ params }: SOChartContainerProps) => {
+  const { id, title, titleColor, chartType, datasource, ...restParams } =
+    params;
 
-const SoChartContainer = ({ params }: SoChartContainerProps) => {
-  const { id, title, titleColor, chartType, datasource, ...restParams } = params;
-  // const { data: seriesData } = useSeries({
-  //   series_id: "GNPCA",
-  //   realtime_start: "2015-01-01",
-  //   realtime_end: "2021-12-31",
-  //   datasource,
-  // });
+  const [fullWidth, setFullWidth] = useState(false)
 
   const formatedStartDate = format(restParams.observation_start, "yyyy-MM-dd");
   const formatedEndDate = format(restParams.observation_end, "yyyy-MM-dd");
@@ -42,8 +33,8 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
   const data = seriesObservationData;
   if (error) {
     return (
-      <ChartShell title={title} titleColor={titleColor}>
-        <ChartToolbar datasource={datasource} id={id} />
+      <ChartShell title={title} titleColor={titleColor} fullWidth={fullWidth}>
+        <ChartToolbar datasource={datasource} id={id} fullWidth={fullWidth} setFullWidth={setFullWidth}/>
         <div className="ml-6">
           <div>{error.message}</div>
           <div>Please change the chart configuration</div>
@@ -64,10 +55,12 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
 
   if (chartType === "bar") {
     return (
-      <ChartShell title={title} titleColor={titleColor}>
-        <ChartToolbar datasource={datasource} id={id} />
-        <BarChartComponent
-          data={data}
+      <ChartShell title={title} titleColor={titleColor} fullWidth={fullWidth}>
+        <ChartToolbar datasource={datasource} id={id} fullWidth={fullWidth} setFullWidth={setFullWidth}/>
+        <BarChartComponent<SeriesObservation[]>
+          data={data.observations}
+          xKey={"date"}
+          yKey={"value"}
           {...restParams}
         />
       </ChartShell>
@@ -75,14 +68,16 @@ const SoChartContainer = ({ params }: SoChartContainerProps) => {
   }
 
   return (
-    <ChartShell title={title} titleColor={titleColor}>
-      <ChartToolbar datasource={datasource} id={id} />
-      <LineChartComponent
-        data={data}
+    <ChartShell title={title} titleColor={titleColor} fullWidth={fullWidth}>
+      <ChartToolbar datasource={datasource} id={id} fullWidth={fullWidth} setFullWidth={setFullWidth}/>
+      <LineChartComponent<SeriesObservation[]>
+        data={data.observations}
+        xKey={"date"}
+        yKey={"value"}
         {...restParams}
       />
     </ChartShell>
   );
 };
 
-export default SoChartContainer;
+export default SOChartContainer;

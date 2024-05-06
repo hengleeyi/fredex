@@ -10,11 +10,15 @@ import {
 
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import SoChartParamsForm from "./so-chart-params-form";
+import SOChartParamsForm from "./so-chart-params-form";
 import { useRouter } from "next/navigation";
 import useQueryString from "@/hooks/useQueryString";
 import { useLocalStorage } from "usehooks-ts";
-import { DataSource, SoChartStorageParams } from "@/schemas/types";
+import {
+  DataSource,
+  SOChartStorageParams,
+  STChartStorageParams,
+} from "@/schemas/types";
 import {
   Select,
   SelectContent,
@@ -22,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import STChartParamsForm from "./st-chart-params-form";
 
 const AddChart = () => {
   const router = useRouter();
@@ -29,10 +34,9 @@ const AddChart = () => {
   const [dataSource, setDatasource] = useState<DataSource>("seriesObservation");
   const modelName = searchParams.get("model");
   const chartId = searchParams.get("chartId");
-  const [storeCharts, setStoreCharts] = useLocalStorage<SoChartStorageParams[]>(
-    "charts",
-    []
-  );
+  const [storeCharts, setStoreCharts] = useLocalStorage<
+    SOChartStorageParams[] | STChartStorageParams[]
+  >("charts", []);
 
   let editChat = undefined;
   if (chartId) {
@@ -80,10 +84,10 @@ const AddChart = () => {
               <SelectValue placeholder="Please choose datasource" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="series">Series</SelectItem>
               <SelectItem value="seriesObservation">
                 Series Observations
               </SelectItem>
+              <SelectItem value="seriesTags">Series Tags</SelectItem>
             </SelectContent>
           </Select>
           <Button
@@ -110,12 +114,29 @@ const AddChart = () => {
           }
         }}
       >
-        <DialogContent className="sm:max-w-[750px]">
+        <DialogContent className="sm:max-w-[780px]">
           <DialogHeader>
             <DialogTitle>Chart configuration</DialogTitle>
-            <DialogDescription>Make changes to custom chart.</DialogDescription>
+            <DialogDescription>Series Observations</DialogDescription>
           </DialogHeader>
-          <SoChartParamsForm chartParams={editChat} />
+          <SOChartParamsForm chartParams={editChat as SOChartStorageParams} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={modelName === "seriesTags"}
+        onOpenChange={(val) => {
+          if (!val) {
+            router.replace("/");
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[780px]">
+          <DialogHeader>
+            <DialogTitle>Chart configuration</DialogTitle>
+            <DialogDescription>Series Tags</DialogDescription>
+          </DialogHeader>
+          <STChartParamsForm chartParams={editChat as STChartStorageParams} />
         </DialogContent>
       </Dialog>
     </>
